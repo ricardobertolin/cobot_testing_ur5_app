@@ -11,6 +11,12 @@ estado sai da interface real-time.
 
 ## Rodar
 
+Quem só quer usar, sem mexer em terminal: em
+[ricardobertolin.github.io/cobot_testing_ur5_app](https://ricardobertolin.github.io/cobot_testing_ur5_app/)
+baixe o `iniciar.bat` (Windows) ou o `iniciar.sh` (macOS e Linux) e dê dois
+cliques. Ele acha o Python, baixa este repositório, resolve o numpy, sobe o
+servidor e abre a tela sozinho. Na mão:
+
 ```
 pip install numpy
 python servidor_ur5.py
