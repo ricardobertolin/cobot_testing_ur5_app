@@ -97,7 +97,10 @@ header a,header button.link{color:#fff;background:none;text-decoration:none;
    acima de tudo: e a mesma escolha do pendant_real.py de desktop. */
 #aviso{background:#a00000;color:#fff;font-weight:700;text-align:center;
   padding:.5rem .8rem;font-size:.9rem;letter-spacing:.02em;flex:none;display:none}
-body.comanda #aviso{display:block}
+body.comanda #aviso,body.quebrou #aviso{display:block}
+/* Quando a pagina nao monta, o texto do erro precisa caber inteiro: e a
+   unica coisa que o usuario tem para contar o que aconteceu. */
+body.quebrou #aviso{white-space:pre-wrap;text-align:left;font-weight:400}
 
 #leds{display:flex;background:#141414;gap:2px;padding:2px;flex:none}
 #leds span{flex:1;text-align:center;padding:.3rem 0;font-size:.72rem;
@@ -1105,21 +1108,33 @@ if(!document.documentElement.requestFullscreen){
 // PARTIDA
 // ============================================================
 
+// Tela em branco e o pior defeito possivel, porque nao da nem para contar o
+// que houve: sem o montar(), o unico texto que sobra na tela e o "Jog" que
+// esta escrito no HTML. Entao qualquer coisa que impeca a montagem vira uma
+// tarja vermelha no topo, com o erro por extenso.
+function naoMontou(erro){
+  document.body.classList.add("quebrou");
+  $("aviso").textContent =
+    "a tela nao carregou: " + erro.message + "\n"
+    + "Se esta pagina veio do GitHub Pages, o mais provavel e cache: o "
+    + "Safari guardou a versao antiga. Abra de novo com ?local=1 no fim do "
+    + "endereco, ou limpe os dados do site.";
+  $("mensagem").textContent = "recarregue a pagina";
+  $("mensagem").classList.add("alerta");
+  $("carregando").textContent = "";
+}
+
 (async () => {
   try{
     ligacao = await abrirLigacao();
+    cfg = ligacao.cfg;
+    montar();
   }catch(erro){
-    // Falhou ate para decidir de onde vem o estado: sem servidor E sem o
-    // local.js. Sem esta rede a pagina ficaria simplesmente em branco.
-    $("carregando").textContent =
-      "nao consegui abrir nem o servidor nem o modo local: " + erro.message;
-    $("mensagem").textContent = "recarregue a pagina";
-    $("mensagem").classList.add("alerta");
+    // Falhou ao decidir de onde vem o estado (sem servidor E sem o
+    // local.js), ou ao montar a tela a partir do config.
+    naoMontou(erro);
     return;
   }
-
-  cfg = ligacao.cfg;
-  montar();
 
   // AS MALHAS PRIMEIRO, O SSE DEPOIS. A ordem nao e estetica.
   //
