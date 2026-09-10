@@ -9,6 +9,31 @@ Robô do laboratório com controlador CB2 rodando PolyScope / URControl
 1.8.25319. É a geração anterior ao CB3: não tem RTDE, e toda leitura de
 estado sai da interface real-time.
 
+## Abrir sem instalar nada
+
+Em
+[ricardobertolin.github.io/cobot_testing_ur5_app](https://ricardobertolin.github.io/cobot_testing_ur5_app/)
+o primeiro botão abre o `pendant_dt` direto no navegador, sem Python, sem
+download e sem digitar endereço nenhum. É o caminho do iPad: Safari,
+Compartilhar → Adicionar à Tela de Início, e vira um app em tela cheia.
+
+Nesse modo a cinemática roda no próprio navegador, no `web/local.js`, e as
+malhas vêm de `web/malha/N.bin`, arquivos parados de 1,75 MB no total. A
+página é a mesma: ela tenta o `/config.json` do servidor e, quando não há
+Python do outro lado, cai para o motor local sozinha. O `?local=1` na URL
+força esse caminho mesmo com o servidor no ar, que é como se testa.
+
+O que esse modo **não** faz é robô. Navegador não abre socket cru, então nem
+`--espelhar` nem `--comandar` existem ali: é simulação, e a pílula do canto
+diz `SIMULAÇÃO` o tempo todo. Para ver ou mover o UR5 de verdade, é o
+servidor Python abaixo.
+
+Duas cópias da cinemática é uma dívida conhecida, e está anotada no cabeçalho
+do `local.js`: navegador não roda numpy. O que a mantém honesta é o formato
+idêntico — o estado que sai do `local.js` tem os mesmos campos, nas mesmas
+unidades, do que sai do `instantaneo()` do Python, e o
+`preparar_web.py` regera os `.bin` do mesmo cache que o servidor serve.
+
 ## Rodar
 
 Quem só quer usar, sem mexer em terminal: em
@@ -98,7 +123,10 @@ teach pendant ao alcance da mão, e prefira `--espelhar` quando o que se quer
 | `pendant_ur5.py` | O pendant de desktop, de onde o servidor tira as constantes de jog, as poses guardadas e o `Espelho` do `--espelhar`. Importar não abre janela: a janela só nasce no `main()` dele. |
 | `pendant_real.py` | O pendant que move o robô de verdade, por `speedj`/`speedl` com prazo. É de onde vem o `--comandar`. |
 | `preparar_cad_step.py` | Regera o cache de malhas a partir de um STEP de montagem, articulando o braço até a pose canônica. Só é preciso se você quiser refazer as malhas. |
+| `preparar_web.py` | Escreve o cache de malhas como `web/malha/N.bin`, que é o que o modo navegador consome. Rode de novo se o cache mudar. |
 | `web/` | As páginas: `pendant.html`, `twin.html` e `pendant_dt.html`. Sem framework e sem CDN. |
+| `web/local.js` | O servidor traduzido para dentro da página: cadeia, jacobiano, jog e config. Só é baixado quando não há Python do outro lado. |
+| `web/malha/` | As malhas prontas para o modo navegador, 1,75 MB. Saem do `preparar_web.py` e vão versionadas: sem elas o GitHub Pages abre a tela sem robô. |
 | `malhas/` | O cache de malhas já gerado, uns 0,9 MB. Vai versionado aqui de propósito, para o repositório abrir e rodar sem o CAD original por perto. |
 
 ## Dependências

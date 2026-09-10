@@ -66,13 +66,26 @@ footer{margin-top:3rem;padding-top:1.25rem;border-top:1px solid var(--borda);
 <p class="sub">Pendant e digital twin no navegador.</p>
 
 <div class="aviso">
-<p><b>Esta página é só a vitrine.</b> A interface funciona junto com um
-programa em Python que roda no <b>seu</b> computador: é ele que faz a
-cinemática, guarda a pose do robô e entrega o modelo 3D. Sem ele no ar a tela
-abre e trava. O arquivo abaixo resolve isso sozinho.</p>
+<p><b>Dois caminhos, e o primeiro não instala nada.</b> A tela roda inteira no
+navegador, em simulação: serve para aula, para o iPad e para quem só quer ver.
+Para seguir ou comandar o UR5 de verdade é preciso o programa em Python no seu
+computador, que é quem abre o socket com o robô.</p>
 </div>
 
-<h2>Windows — dois cliques</h2>
+<h2>No iPad, ou em qualquer navegador</h2>
+<p class="acoes">
+<a class="botao" href="web/pendant_dt.html">Abrir o pendant + 3D agora</a>
+</p>
+<p>Abre aqui mesmo, sem baixar nada e sem configurar nada. A cinemática roda no
+próprio navegador e o robô do CAD aparece em 3D ao lado do pendant: as setas
+movem as juntas, o jog cartesiano funciona em Base e em Tool, e as poses
+guardadas estão lá.</p>
+<p class="nota">É <b>simulação</b>, sem robô nenhum do outro lado — a pílula do
+canto diz isso o tempo todo. A primeira abertura baixa cerca de 1,8 MB de malha;
+depois o navegador guarda. No iPad, <b>Compartilhar → Adicionar à Tela de
+Início</b> deixa a tela em cheio, sem barra de endereço.</p>
+
+<h2>Com o robô de verdade — Windows, dois cliques</h2>
 <p class="acoes">
 <a class="botao" href="iniciar.bat" download>Baixar o iniciar.bat</a>
 </p>
