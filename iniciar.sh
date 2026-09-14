@@ -93,7 +93,34 @@ if ! "$PY" -c 'import numpy' >/dev/null 2>&1; then
 fi
 echo "  [ok] numpy pronto."
 
-# ---------- 4. servidor + navegador ----------
+# ---------- 4. modo ----------
+#
+# Sem argumento, pergunta. Com argumento, repassa direto ao servidor:
+#   bash iniciar.sh --espelhar 10.26.10.20
+#   bash iniciar.sh --comandar 10.26.10.20
+
+if [ $# -eq 0 ]; then
+  echo
+  echo "  Qual modo?"
+  echo "    1 - simulacao (nao conecta no robo)"
+  echo "    2 - espelhar  (le a posicao do robo real, sem jog)"
+  echo "    3 - comandar  (MOVE O ROBO DE VERDADE)"
+  echo
+  read -r -p "  Escolha [1]: " OPCAO
+  case "${OPCAO:-1}" in
+    1) ;;
+    2|3)
+      [ "${OPCAO}" = 2 ] && FLAG="--espelhar" || FLAG="--comandar"
+      read -r -p "  IP do robo [10.26.10.20]: " IP
+      set -- "$FLAG" "${IP:-10.26.10.20}"
+      ;;
+    *) morrer "Opcao invalida: $OPCAO. Rode de novo e escolha 1, 2 ou 3." ;;
+  esac
+fi
+
+echo "  [ok] modo: ${*:-simulacao}"
+
+# ---------- 5. servidor + navegador ----------
 
 echo
 echo "  Abrindo $PAGINA em instantes."
@@ -113,4 +140,4 @@ abrir() {
 }
 abrir &
 
-exec "$PY" "$SERVIDOR"
+exec "$PY" "$SERVIDOR" "$@"

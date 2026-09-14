@@ -85,7 +85,36 @@ if errorlevel 1 goto :semNumpy
 :temNumpy
 echo   [ok] numpy pronto.
 
-rem ---------- 4. servidor + navegador ----------
+rem ---------- 4. modo ----------
+rem
+rem Sem argumento, pergunta. Com argumento, repassa direto ao servidor:
+rem   iniciar.bat --espelhar 10.26.10.20
+rem   iniciar.bat --comandar 10.26.10.20
+
+set "MODO=%*"
+if not "%MODO%"=="" goto :temModo
+
+echo.
+echo   Qual modo?
+echo     1 - simulacao (nao conecta no robo)
+echo     2 - espelhar  (le a posicao do robo real, sem jog)
+echo     3 - comandar  (MOVE O ROBO DE VERDADE)
+echo.
+set "OPCAO=1"
+set /p "OPCAO=  Escolha [1]: "
+if "%OPCAO%"=="1" goto :temModo
+if "%OPCAO%"=="2" set "MODO=--espelhar"
+if "%OPCAO%"=="3" set "MODO=--comandar"
+if not defined MODO goto :semModo
+
+set "IP=10.26.10.20"
+set /p "IP=  IP do robo [10.26.10.20]: "
+set "MODO=%MODO% %IP%"
+
+:temModo
+if "%MODO%"=="" (echo   [ok] modo: simulacao) else (echo   [ok] modo: %MODO%)
+
+rem ---------- 5. servidor + navegador ----------
 
 echo.
 echo   Abrindo %PAGINA% em instantes.
@@ -95,7 +124,7 @@ echo.
 rem O navegador espera o servidor carregar as malhas antes de bater na porta.
 start "" /min cmd /c "timeout /t 5 /nobreak >nul & start %PAGINA%"
 
-%PY% "%SERVIDOR%"
+%PY% "%SERVIDOR%" %MODO%
 goto :fim
 
 rem ============================================================
@@ -128,6 +157,10 @@ goto :fim
 :semArquivo
 echo   [X] O %SERVIDOR% nao apareceu depois de descompactar.
 echo       Apague a pasta %PROJETO%-main e rode este arquivo de novo.
+goto :fim
+
+:semModo
+echo   [X] Opcao invalida: %OPCAO%. Rode de novo e escolha 1, 2 ou 3.
 goto :fim
 
 :semNumpy
