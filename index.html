@@ -97,8 +97,18 @@ e diz em texto qual delas falhou.</p>
 <a class="botao" href="iniciar.bat" download>Baixar o iniciar.bat</a>
 </p>
 <p>Baixe e dê dois cliques nele, na própria pasta de Downloads. Ele procura o
-Python, baixa o projeto, instala o que falta, sobe o servidor e abre a tela.
-Deixe a janela preta aberta enquanto estiver usando.</p>
+Python, baixa o projeto, instala o que falta, pergunta o modo, sobe o servidor
+e abre a tela. Deixe a janela preta aberta enquanto estiver usando.</p>
+<p>Na pergunta do modo, digite o número e dê Enter:</p>
+<ol>
+<li><b>simulação</b> — não conecta no robô (é o padrão, basta Enter);</li>
+<li><b>espelhar</b> — lê a posição do UR5 real e mostra na tela, sem jog;</li>
+<li><b>comandar</b> — <b>move o robô de verdade</b> pelo navegador. Mantenha o
+teach pendant ao alcance da mão.</li>
+</ol>
+<p class="nota">Nos modos 2 e 3 ele pergunta também o IP do robô; Enter aceita
+<code>10.26.10.20</code>. No modo 3 o robô precisa estar ligado e em
+<b>RUNNING</b>, senão o servidor não sobe e diz por quê.</p>
 <p class="nota">O Windows pode avisar que o arquivo veio da internet: clique em
 <b>Mais informações</b> e depois em <b>Executar assim mesmo</b>. Se não tiver
 Python instalado, ele abre a página de download e avisa o que fazer.</p>
@@ -110,15 +120,22 @@ Python instalado, ele abre a página de download e avisa o que fazer.</p>
 <p>Depois, no Terminal:</p>
 <div class="cmd"><code>bash ~/Downloads/iniciar.sh</code>
 <button type="button" data-copiar>copiar</button></div>
+<p class="nota">Ele faz a mesma pergunta de modo e IP. Para pular a pergunta,
+passe o modo direto, no Windows ou aqui:
+<code>bash ~/Downloads/iniciar.sh --espelhar 10.26.10.20</code> (ou
+<code>iniciar.bat --comandar 10.26.10.20</code>).</p>
 
 <h2>Já rodou o iniciador?</h2>
 <p class="acoes">
-<a class="botao" href="http://localhost:8080/pendant_dt">Abrir o simulador</a>
+<a class="botao" href="http://localhost:8080/pendant_dt">Abrir a tela</a>
 <span class="nota">→ <code>http://localhost:8080/pendant_dt</code></span>
 </p>
 <p class="nota">Se der erro de conexão, o servidor não está no ar. Para abrir no
 celular ou no iPad da mesma rede, use o endereço que o servidor imprime no
 terminal, algo como <code>http://192.168.0.10:8080/pendant_dt</code>.</p>
+<p class="nota">Abriu em simulação e você queria o robô? A tela mostra o modo
+em que o servidor subiu. Feche a janela do iniciador, rode de novo e escolha 2
+ou 3.</p>
 
 <details>
 <summary>Prefere fazer na mão? São quatro passos.</summary>
@@ -136,7 +153,10 @@ No Windows, marque <b>Add Python to PATH</b> na primeira tela do instalador.</li
 <button type="button" data-copiar>copiar</button></div>
 <div class="cmd"><code>python servidor_ur5.py</code>
 <button type="button" data-copiar>copiar</button></div>
-<span class="nota">No macOS e no Linux, <code>python3</code> e <code>pip3</code>.
+<span class="nota">Assim sobe em simulação. Com o robô, acrescente o modo e o
+IP: <code>python servidor_ur5.py --espelhar 10.26.10.20</code> só lê;
+<code>python servidor_ur5.py --comandar 10.26.10.20</code> move o robô de
+verdade. No macOS e no Linux, <code>python3</code> e <code>pip3</code>.
 Para encerrar, <code>Ctrl+C</code>.</span></li>
 
 <li><b>Abra</b> <code>http://localhost:8080/pendant_dt</code> no navegador.</li>
@@ -147,8 +167,8 @@ Para encerrar, <code>Ctrl+C</code>.</span></li>
 <p>Outras telas, com o servidor no ar:
 <a href="http://localhost:8080/pendant">só o pendant</a> ·
 <a href="http://localhost:8080/twin">só o 3D</a></p>
-<p>Sem robô nenhum na mesa ele roda em simulação. Para seguir o UR5 de verdade
-na rede, o servidor tem <code>--espelhar IP</code>; está explicado no README.</p>
+<p>Os três modos do servidor (simulação, <code>--espelhar IP</code> e
+<code>--comandar IP</code>) estão explicados em detalhe no README.</p>
 <p>Código, README e licença em
 <a href="https://github.com/ricardobertolin/cobot_testing_ur5_app">github.com/ricardobertolin/cobot_testing_ur5_app</a>.</p>
 </footer>
